@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eQLM - Color Library</title>
+    <!-- Fonts and Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* --- CSS Reset & Variables --- */
+        :root {
+            --primary-color: #4a90e2; /* Matches blue in screenshot */
+            --header-height: 60px;
+            --sidebar-width: 260px;
+            --bg-color: #f4f6f8;
+            --text-color: #333;
+            --border-color: #e0e0e0;
+            --success-color: #4caf50;
+            --danger-color: #f44336;
+            --active-toggle: #4caf50;
+            --inactive-toggle: #ccc;
+            --row-hover: #f9fafb;
+            --edit-mode-bg: #E3F2FD;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            height: 100vh;
+            display: flex;
+            overflow: hidden;
+        }
+
+        /* --- Sidebar --- */
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: #fff;
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            z-index: 10;
+        }
+
+        .logo-area {
+            height: var(--header-height);
+            display: flex;
+            align-items: center;
+            padding-left: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: 700;
+            color: #555;
+        }
+
+        .logo-text span {
+            color: #8bc34a; /* QLM Greenish tone */
+        }
+
+        .nav-menu {
+            list-style: none;
+            padding-top: 20px;
+            overflow-y: auto;
+        }
+
+        .nav-item {
+            padding: 0;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            text-decoration: none;
+            color: #666;
+            font-size: 14px;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .nav-link:hover {
+            background-color: #f0f0f0;
+            color: var(--primary-color);
+        }
+
+        .nav-link.active {
+            background-color: #e8f0fe;
+            color: var(--primary-color);
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .nav-icon {
+            width: 20px;
+            margin-right: 10px;
+            text-align: center;
+        }
+
+        .nav-arrow {
+            margin-left: auto;
+            font-size: 10px;
+        }
+
+        /* Submenu */
+        .submenu {
+            list-style: none;
+            background-color: #fafafa;
+            display: none; /* Hidden by default */
+        }
+
+        .submenu.open {
+            display: block;
+        }
+
+        .submenu-item {
+            padding-left: 50px;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            font-size: 13px;
+            color: #666;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+
+        .submenu-item:hover {
+            color: var(--primary-color);
+        }
+        
+        .submenu-item.active-sub {
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+
+        /* --- Main Content --- */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        /* Header */
+        .top-header {
+            height: var(--header-height);
+            background-color: #fff;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
+
+        .page-title {
+            font-size: 18px;
+            color: #444;
+            font-weight: 500;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .header-icon {
+            color: #777;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .user-profile {
+            width: 35px;
+            height: 35px;
+            background-color: #4caf50;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        /* Content Body */
+        .content-body {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        /* Breadcrumb/Top Section */
+        .module-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .module-title {
+            font-size: 20px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-size: 13px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.2s;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #357abd;
+        }
+        
+        .btn-primary:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .btn-success {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .btn-secondary {
+            background-color: #9e9e9e;
+            color: white;
+        }
+        
+        .btn-icon-only {
+            background: none;
+            border: none;
+            color: #666;
+            font-size: 16px;
+            padding: 5px;
+        }
+        
+        .btn-icon-only:hover {
+            color: var(--primary-color);
+        }
+
+        /* Data Table */
+        .data-card {
+            background: white;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: left;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-bottom: 2px solid var(--border-color);
+            font-size: 13px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+            vertical-align: middle;
+        }
+
+        tr.edit-mode {
+            background-color: var(--edit-mode-bg) !important;
+        }
+        
+        tr:hover {
+            background-color: var(--row-hover);
+        }
+
+        /* Form Inputs */
+        .form-input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .form-input:focus {
+            border-color: var(--primary-color);
+            outline: none;
+        }
+        
+        .error-msg {
+            color: var(--danger-color);
+            font-size: 12px;
+            margin-top: 4px;
+            display: none;
+        }
+
+        /* Toggle Switch */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 40px;
+            height: 20px;
+        }
+
+        .switch input { 
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--inactive-toggle);
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 14px;
+            width: 14px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--active-toggle);
+        }
+
+        input:focus + .slider {
+            box-shadow: 0 0 1px var(--active-toggle);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+        
+        .switch.disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .switch.disabled .slider {
+            cursor: not-allowed;
+        }
+
+        /* Status Badge for Read-only */
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        .status-active { background-color: #e8f5e9; color: #2e7d32; }
+        .status-inactive { background-color: #f5f5f5; color: #616161; }
+
+        /* Actions Cell */
+        .actions-cell {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .modal {
+            background: white;
+            border-radius: 8px;
+            width: 600px;
+            max-width: 90%;
+            max-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+        
+        .modal-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-title { font-weight: 600; font-size: 16px; }
+        
+        .modal-body {
+            padding: 20px;
+            overflow-y: auto;
+        }
+        
+        .modal-footer {
+            padding: 15px 20px;
+            border-top: 1px solid #eee;
+            text-align: right;
+        }
+
+        /* History Table in Modal */
+        .history-table th { background-color: #e3f2fd; }
+        .history-table td { font-size: 12px; }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: #323232;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 4px;
+            font-size: 14px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s;
+            z-index: 2000;
+        }
+        
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .toast.success { background-color: var(--success-color); }
+        .toast.error { background-color: var(--danger-color); }
+
+        /* DEMO CONTROLS (For User Testing) */
+        .demo-controls {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: #fff;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 9999;
+            width: 220px;
+        }
+        .demo-title { font-size: 12px; font-weight: bold; margin-bottom: 10px; color: #666; text-transform: uppercase; }
+        .demo-option { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 13px; }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo-area">
+            <div class="logo-text">eQ <span>QLM</span></div>
+        </div>
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a class="nav-link"><i class="fas fa-chart-bar nav-icon"></i> Dashboard</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link"><i class="fas fa-flask nav-icon"></i> LabWorks <i class="fas fa-chevron-left nav-arrow"></i></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link"><i class="fas fa-users nav-icon"></i> User Management <i class="fas fa-chevron-left nav-arrow"></i></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" onclick="toggleSubmenu('config-submenu')">
+                    <i class="fas fa-cog nav-icon"></i> Configuration <i class="fas fa-chevron-down nav-arrow"></i>
+                </a>
+                <ul class="submenu open" id="config-submenu">
+                    <li class="submenu-item"><i class="far fa-circle" style="font-size: 8px; margin-right: 10px;"></i> Application Settings</li>
+                    <li class="submenu-item"><i class="far fa-circle" style="font-size: 8px; margin-right: 10px;"></i> Workflows</li>
+                    <li class="submenu-item" onclick="toggleSubmenu('library-submenu')">
+                        <i class="far fa-circle" style="font-size: 8px; margin-right: 10px;"></i> Library 
+                        <i class="fas fa-chevron-down" style="font-size: 8px; margin-left: auto;"></i>
+                    </li>
+                    <ul class="submenu open" id="library-submenu" style="padding-left: 20px; background-color: #f1f1f1;">
+                        <li class="submenu-item active-sub">Color</li>
+                        <li class="submenu-item">Profile</li>
+                    </ul>
+                    <li class="submenu-item"><i class="far fa-circle" style="font-size: 8px; margin-right: 10px;"></i> Email Templates</li>
+                </ul>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link"><i class="fas fa-file-alt nav-icon"></i> Reports <i class="fas fa-chevron-left nav-arrow"></i></a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Top Header -->
+        <header class="top-header">
+            <div class="page-title">Configuration Dashboard</div>
+            <div class="header-actions">
+                <i class="fas fa-search header-icon"></i>
+                <i class="fas fa-expand header-icon"></i>
+                <i class="fas fa-bars header-icon"></i>
+                <div class="user-profile">SM</div>
+            </div>
+        </header>
+
+        <!-- Body -->
+        <div class="content-body">
+            <div class="module-header">
+                <h2 class="module-title">Color Library</h2>
+                <button class="btn btn-primary" id="add-btn" onclick="startAddNew()">
+                    <i class="fas fa-plus"></i> Add New Color
+                </button>
+            </div>
+
+            <!-- Data Table -->
+            <div class="data-card">
+                <table>
+                    <thead>
+                        <tr>
+                            <th width="10%">SL. No.</th>
+                            <th width="40%">Color Name</th>
+                            <th width="10%" style="text-align: center;">History</th>
+                            <th width="20%">Status</th>
+                            <th width="20%">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="color-table-body">
+                        <!-- Rows generated by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- History Modal -->
+    <div class="modal-overlay" id="history-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title" id="history-title">Color History</div>
+                <i class="fas fa-times" style="cursor: pointer;" onclick="closeHistory()"></i>
+            </div>
+            <div class="modal-body">
+                <table class="history-table">
+                    <thead>
+                        <tr>
+                            <th>Date & Time</th>
+                            <th>Action</th>
+                            <th>User</th>
+                            <th>Changes</th>
+                        </tr>
+                    </thead>
+                    <tbody id="history-content">
+                        <!-- History items -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeHistory()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">Message here</div>
+
+    <!-- DEMO CONTROLS for Prototype Reviewer -->
+    <div class="demo-controls">
+        <div class="demo-title">Simulate Role Permissions</div>
+        <div class="demo-option">
+            <span>Can Create (New)</span>
+            <label class="switch" style="width: 30px; height: 16px;">
+                <input type="checkbox" id="perm-new" checked onchange="updatePermissions()">
+                <span class="slider" style="border-radius: 16px;"></span>
+            </label>
+        </div>
+        <div class="demo-option">
+            <span>Can Edit</span>
+            <label class="switch" style="width: 30px; height: 16px;">
+                <input type="checkbox" id="perm-edit" checked onchange="updatePermissions()">
+                <span class="slider" style="border-radius: 16px;"></span>
+            </label>
+        </div>
+        <div class="demo-option">
+            <span>Can Deactivate (Delete)</span>
+            <label class="switch" style="width: 30px; height: 16px;">
+                <input type="checkbox" id="perm-delete" checked onchange="updatePermissions()">
+                <span class="slider" style="border-radius: 16px;"></span>
+            </label>
+        </div>
+    </div>
+
+    <script>
+        // --- State Management ---
+        const state = {
+            permissions: {
+                new: true,
+                edit: true,
+                delete: true
+            },
+            colors: [
+                { id: 1, name: 'Red', status: true, history: [] },
+                { id: 2, name: 'Green', status: true, history: [] },
+                { id: 3, name: 'Blue', status: true, history: [] },
+                { id: 4, name: 'Yellow', status: false, history: [] }
+            ],
+            editingId: null, // ID of row currently being edited
+            isCreating: false // True if adding a new row
+        };
+
+        // Initialize history for demo data
+        state.colors.forEach(c => {
+            c.history.push({
+                date: '10-Dec-2025 10:00:00',
+                action: 'Created',
+                user: 'System Admin',
+                details: 'Initial Load'
+            });
+        });
+
+        // --- DOM Elements ---
+        const tableBody = document.getElementById('color-table-body');
+        const addBtn = document.getElementById('add-btn');
+        const toast = document.getElementById('toast');
+
+        // --- Render Functions ---
+        function renderTable() {
+            tableBody.innerHTML = '';
+
+            // Handle "Add New" Row
+            if (state.isCreating) {
+                const newRow = document.createElement('tr');
+                newRow.className = 'edit-mode';
+                newRow.innerHTML = `
+                    <td>Auto</td>
+                    <td>
+                        <input type="text" class="form-input" id="new-color-name" placeholder="Enter Color Name" autofocus>
+                        <div class="error-msg" id="new-error"></div>
+                    </td>
+                    <td style="text-align: center;"><i class="fas fa-history" style="color: #ccc;"></i></td>
+                    <td><span class="status-badge status-active">Active</span></td>
+                    <td class="actions-cell">
+                        <button class="btn btn-success btn-sm" onclick="saveNewColor()"><i class="fas fa-check"></i> Save</button>
+                        <button class="btn btn-secondary btn-sm" onclick="cancelNew()"><i class="fas fa-times"></i></button>
+                    </td>
+                `;
+                tableBody.appendChild(newRow);
+            }
+
+            // Handle Existing Data
+            state.colors.forEach((color, index) => {
+                const isEditing = state.editingId === color.id;
+                const tr = document.createElement('tr');
+                if (isEditing) tr.className = 'edit-mode';
+
+                if (isEditing) {
+                    // EDIT MODE
+                    const canDelete = state.permissions.delete;
+                    tr.innerHTML = `
+                        <td>${index + 1}</td>
+                        <td>
+                            <input type="text" class="form-input" id="edit-name-${color.id}" value="${color.name}">
+                            <div class="error-msg" id="edit-error-${color.id}"></div>
+                        </td>
+                        <td style="text-align: center;">
+                             <i class="fas fa-history" style="cursor: pointer; color: var(--primary-color);" onclick="showHistory(${color.id})"></i>
+                        </td>
+                        <td>
+                            ${canDelete ? `
+                            <label class="switch">
+                                <input type="checkbox" id="edit-status-${color.id}" ${color.status ? 'checked' : ''}>
+                                <span class="slider"></span>
+                            </label>
+                            <span style="font-size: 12px; margin-left: 5px;">${color.status ? 'Active' : 'Inactive'}</span>
+                            ` : `
+                             <span class="status-badge ${color.status ? 'status-active' : 'status-inactive'}">
+                                ${color.status ? 'Active' : 'Inactive'}
+                            </span>
+                            `}
+                        </td>
+                        <td class="actions-cell">
+                            <button class="btn btn-primary btn-sm" onclick="updateColor(${color.id})">Update</button>
+                            <button class="btn btn-secondary btn-sm" onclick="cancelEdit()"><i class="fas fa-times"></i></button>
+                        </td>
+                    `;
+                } else {
+                    // VIEW MODE
+                    tr.innerHTML = `
+                        <td>${index + 1}</td>
+                        <td>${color.name}</td>
+                        <td style="text-align: center;">
+                            <i class="fas fa-history" style="cursor: pointer; color: var(--primary-color);" onclick="showHistory(${color.id})"></i>
+                        </td>
+                        <td>
+                            <span class="status-badge ${color.status ? 'status-active' : 'status-inactive'}">
+                                ${color.status ? 'Active' : 'Inactive'}
+                            </span>
+                        </td>
+                        <td class="actions-cell">
+                            ${state.permissions.edit ? 
+                                `<button class="btn btn-icon-only" onclick="startEdit(${color.id})"><i class="fas fa-pencil-alt"></i></button>` : 
+                                '<span style="color:#ccc; font-size:12px;">View Only</span>'
+                            }
+                        </td>
+                    `;
+                }
+                tableBody.appendChild(tr);
+            });
+        }
+
+        function updateUIControls() {
+            // Show/Hide Add Button based on permission
+            addBtn.style.display = state.permissions.new ? 'inline-flex' : 'none';
+        }
+
+        // --- Actions ---
+
+        function startAddNew() {
+            if (state.editingId) cancelEdit(); // Close other edits
+            state.isCreating = true;
+            renderTable();
+            // Focus new input
+            setTimeout(() => document.getElementById('new-color-name').focus(), 50);
+        }
+
+        function cancelNew() {
+            if(confirm("Discard changes?")) {
+                state.isCreating = false;
+                renderTable();
+            }
+        }
+
+        function saveNewColor() {
+            const input = document.getElementById('new-color-name');
+            const errorDiv = document.getElementById('new-error');
+            const name = input.value.trim();
+
+            // Validation
+            if (!name) {
+                showInlineError(errorDiv, "Color Name is required");
+                return;
+            }
+            if (state.colors.some(c => c.name.toLowerCase() === name.toLowerCase())) {
+                showInlineError(errorDiv, "Color Name must be unique");
+                return;
+            }
+
+            // Save
+            const newColor = {
+                id: Date.now(),
+                name: name,
+                status: true,
+                history: [{
+                    date: getFormattedDate(),
+                    action: 'Created',
+                    user: 'Demo User',
+                    details: 'Status: Active'
+                }]
+            };
+            
+            state.colors.unshift(newColor); // Add to top
+            state.isCreating = false;
+            renderTable();
+            showToast("Color '" + name + "' created successfully", 'success');
+        }
+
+        function startEdit(id) {
+            if (state.isCreating) state.isCreating = false;
+            state.editingId = id;
+            renderTable();
+            // Focus
+            setTimeout(() => document.getElementById(`edit-name-${id}`).focus(), 50);
+        }
+
+        function cancelEdit() {
+            state.editingId = null;
+            renderTable();
+        }
+
+        function updateColor(id) {
+            const input = document.getElementById(`edit-name-${id}`);
+            const statusInput = document.getElementById(`edit-status-${id}`);
+            const errorDiv = document.getElementById(`edit-error-${id}`);
+            const newName = input.value.trim();
+            
+            // Get original color
+            const color = state.colors.find(c => c.id === id);
+            
+            // Determine Status (if permission denied, keep original)
+            let newStatus = color.status;
+            if (state.permissions.delete && statusInput) {
+                newStatus = statusInput.checked;
+            }
+
+            // Validation
+            if (!newName) {
+                showInlineError(errorDiv, "Color Name is required");
+                return;
+            }
+            // Check uniqueness excluding self
+            if (state.colors.some(c => c.id !== id && c.name.toLowerCase() === newName.toLowerCase())) {
+                showInlineError(errorDiv, "Color Name must be unique");
+                return;
+            }
+
+            // Detect Changes
+            const changes = [];
+            if (color.name !== newName) changes.push(`Name: ${color.name} -> ${newName}`);
+            if (color.status !== newStatus) changes.push(`Status: ${color.status?'Active':'Inactive'} -> ${newStatus?'Active':'Inactive'}`);
+
+            if (changes.length > 0) {
+                // Update Data
+                color.name = newName;
+                color.status = newStatus;
+                color.history.unshift({
+                    date: getFormattedDate(),
+                    action: 'Updated',
+                    user: 'Demo User',
+                    details: changes.join(', ')
+                });
+
+                showToast("Color updated successfully", 'success');
+            }
+
+            state.editingId = null;
+            renderTable();
+        }
+
+        // --- History Modal ---
+        function showHistory(id) {
+            const color = state.colors.find(c => c.id === id);
+            document.getElementById('history-title').innerText = `Color History - ${color.name}`;
+            const historyBody = document.getElementById('history-content');
+            historyBody.innerHTML = '';
+
+            color.history.forEach(h => {
+                const row = `
+                    <tr>
+                        <td>${h.date}</td>
+                        <td>${h.action}</td>
+                        <td>${h.user}</td>
+                        <td>${h.details}</td>
+                    </tr>
+                `;
+                historyBody.innerHTML += row;
+            });
+
+            document.getElementById('history-modal').style.display = 'flex';
+        }
+
+        function closeHistory() {
+            document.getElementById('history-modal').style.display = 'none';
+        }
+
+        // --- Utilities ---
+
+        function showInlineError(element, msg) {
+            element.innerText = msg;
+            element.style.display = 'block';
+        }
+
+        function showToast(msg, type) {
+            toast.innerText = msg;
+            toast.className = `toast ${type} show`;
+            setTimeout(() => {
+                toast.className = 'toast';
+            }, 3000);
+        }
+
+        function getFormattedDate() {
+            const now = new Date();
+            const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+            const pad = n => n < 10 ? '0'+n : n;
+            return `${pad(now.getDate())}-${months[now.getMonth()]}-${now.getFullYear()} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+        }
+
+        function toggleSubmenu(id) {
+            const el = document.getElementById(id);
+            if (el.style.display === 'block' || el.classList.contains('open')) {
+                el.style.display = 'none';
+                el.classList.remove('open');
+            } else {
+                el.style.display = 'block';
+                el.classList.add('open');
+            }
+        }
+
+        // --- Demo Permission Control ---
+        function updatePermissions() {
+            state.permissions.new = document.getElementById('perm-new').checked;
+            state.permissions.edit = document.getElementById('perm-edit').checked;
+            state.permissions.delete = document.getElementById('perm-delete').checked;
+            
+            // Reset edit state to avoid UI glitches when permissions change mid-edit
+            state.editingId = null;
+            state.isCreating = false;
+            
+            updateUIControls();
+            renderTable();
+        }
+
+        // Init
+        updateUIControls();
+        renderTable();
+
+    </script>
+</body>
+</html>
