@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>eQLM - Color Library</title>
+    <title>eQLM - Prototype</title>
     <!-- Fonts and Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -57,6 +57,12 @@
             align-items: center;
             padding-left: 20px;
             border-bottom: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+
+        .logo-img {
+            max-height: 40px;
+            max-width: 100%;
         }
 
         .logo-text {
@@ -198,9 +204,57 @@
             flex: 1;
             padding: 20px;
             overflow-y: auto;
+            position: relative;
         }
 
-        /* Breadcrumb/Top Section */
+        /* Views */
+        .view-section {
+            display: none;
+            height: 100%;
+        }
+        
+        .view-section.active-view {
+            display: block;
+        }
+
+        /* Dashboard View */
+        .dashboard-container {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .plant-tile {
+            background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+            width: 280px;
+            height: 120px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .plant-tile:hover {
+            transform: translateY(-5px);
+        }
+
+        .tile-name {
+            font-size: 18px;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+        
+        .tile-icon {
+            font-size: 40px;
+            opacity: 0.3;
+        }
+
+        /* Module Header */
         .module-header {
             display: flex;
             justify-content: space-between;
@@ -214,6 +268,7 @@
             color: #333;
         }
 
+        /* Buttons */
         .btn {
             padding: 8px 16px;
             border-radius: 4px;
@@ -235,11 +290,6 @@
             background-color: #357abd;
         }
         
-        .btn-primary:disabled {
-            background-color: #ccc;
-            cursor: not-allowed;
-        }
-
         .btn-success {
             background-color: var(--success-color);
             color: white;
@@ -268,6 +318,7 @@
             border-radius: 4px;
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
             overflow: hidden;
+            margin-bottom: 20px;
         }
 
         table {
@@ -283,6 +334,9 @@
             font-size: 13px;
             font-weight: 600;
             color: #555;
+            position: sticky;
+            top: 0;
+            z-index: 5;
         }
 
         td {
@@ -307,11 +361,6 @@
             border: 1px solid #ccc;
             border-radius: 4px;
             font-size: 14px;
-        }
-        
-        .form-input:focus {
-            border-color: var(--primary-color);
-            outline: none;
         }
         
         .error-msg {
@@ -363,23 +412,10 @@
             background-color: var(--active-toggle);
         }
 
-        input:focus + .slider {
-            box-shadow: 0 0 1px var(--active-toggle);
-        }
-
         input:checked + .slider:before {
             transform: translateX(20px);
         }
         
-        .switch.disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-        
-        .switch.disabled .slider {
-            cursor: not-allowed;
-        }
-
         /* Status Badge for Read-only */
         .status-badge {
             padding: 4px 8px;
@@ -395,6 +431,47 @@
             display: flex;
             gap: 10px;
             align-items: center;
+        }
+
+        /* Application Settings & Permission Card */
+        .settings-card {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            max-width: 600px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #555;
+        }
+
+        /* Roles Page Items */
+        .permission-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .permission-item:last-child {
+            border-bottom: none;
+        }
+        .perm-info {
+            font-size: 14px;
+            color: #444;
+        }
+        .perm-desc {
+            font-size: 12px;
+            color: #888;
+            margin-top: 4px;
         }
 
         /* Modal */
@@ -443,7 +520,6 @@
             text-align: right;
         }
 
-        /* History Table in Modal */
         .history-table th { background-color: #e3f2fd; }
         .history-table td { font-size: 12px; }
 
@@ -471,54 +547,45 @@
         .toast.success { background-color: var(--success-color); }
         .toast.error { background-color: var(--danger-color); }
 
-        /* DEMO CONTROLS (For User Testing) */
-        .demo-controls {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            background: #fff;
-            padding: 15px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            z-index: 9999;
-            width: 220px;
-        }
-        .demo-title { font-size: 12px; font-weight: bold; margin-bottom: 10px; color: #666; text-transform: uppercase; }
-        .demo-option { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 13px; }
     </style>
 </head>
 <body>
 
     <!-- Sidebar -->
     <div class="sidebar">
-        <div class="logo-area">
-            <div class="logo-text">eQ <span>QLM</span></div>
+        <div class="logo-area" id="logo-area">
+            <div class="logo-text" id="default-logo">eQ <span>QLM</span></div>
         </div>
         <ul class="nav-menu">
             <li class="nav-item">
-                <a class="nav-link"><i class="fas fa-chart-bar nav-icon"></i> Dashboard</a>
+                <a class="nav-link active" id="nav-dashboard" onclick="switchView('view-dashboard', this)"><i class="fas fa-chart-bar nav-icon"></i> Dashboard</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link"><i class="fas fa-flask nav-icon"></i> LabWorks <i class="fas fa-chevron-left nav-arrow"></i></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link"><i class="fas fa-users nav-icon"></i> User Management <i class="fas fa-chevron-left nav-arrow"></i></a>
+                <a class="nav-link" onclick="toggleSubmenu('user-submenu')"><i class="fas fa-users nav-icon"></i> User Management <i class="fas fa-chevron-down nav-arrow"></i></a>
+                <ul class="submenu" id="user-submenu">
+                     <li class="submenu-item" onclick="switchView('view-roles', null, this)"><i class="far fa-circle" style="font-size: 8px; margin-right: 10px;"></i> Roles</li>
+                </ul>
             </li>
             <li class="nav-item">
-                <a class="nav-link active" onclick="toggleSubmenu('config-submenu')">
+                <a class="nav-link" onclick="toggleSubmenu('config-submenu')">
                     <i class="fas fa-cog nav-icon"></i> Configuration <i class="fas fa-chevron-down nav-arrow"></i>
                 </a>
-                <ul class="submenu open" id="config-submenu">
-                    <li class="submenu-item"><i class="far fa-circle" style="font-size: 8px; margin-right: 10px;"></i> Application Settings</li>
+                <ul class="submenu" id="config-submenu">
+                    <li class="submenu-item" onclick="switchView('view-app-settings', null, this)"><i class="far fa-circle" style="font-size: 8px; margin-right: 10px;"></i> Application Settings</li>
                     <li class="submenu-item"><i class="far fa-circle" style="font-size: 8px; margin-right: 10px;"></i> Workflows</li>
                     <li class="submenu-item" onclick="toggleSubmenu('library-submenu')">
                         <i class="far fa-circle" style="font-size: 8px; margin-right: 10px;"></i> Library 
                         <i class="fas fa-chevron-down" style="font-size: 8px; margin-left: auto;"></i>
                     </li>
-                    <ul class="submenu open" id="library-submenu" style="padding-left: 20px; background-color: #f1f1f1;">
-                        <li class="submenu-item active-sub">Color</li>
-                        <li class="submenu-item">Profile</li>
+                    <ul class="submenu" id="library-submenu" style="padding-left: 20px; background-color: #f1f1f1;">
+                        <li class="submenu-item" onclick="switchView('view-color-library', null, this)">Color</li>
+                        <li class="submenu-item" onclick="switchView('view-placeholder', null, this, 'Profile Library')">Profile</li>
+                        <li class="submenu-item" onclick="switchView('view-placeholder', null, this, 'Line Library')">Line</li>
+                        <li class="submenu-item" onclick="switchView('view-placeholder', null, this, 'Length Library')">Length</li>
+                        <li class="submenu-item" onclick="switchView('view-placeholder', null, this, 'Assign Lab Properties')">Assign Lab Properties</li>
                     </ul>
                     <li class="submenu-item"><i class="far fa-circle" style="font-size: 8px; margin-right: 10px;"></i> Email Templates</li>
                 </ul>
@@ -533,7 +600,7 @@
     <div class="main-content">
         <!-- Top Header -->
         <header class="top-header">
-            <div class="page-title">Configuration Dashboard</div>
+            <div class="page-title" id="page-title-display">Plant Dashboard</div>
             <div class="header-actions">
                 <i class="fas fa-search header-icon"></i>
                 <i class="fas fa-expand header-icon"></i>
@@ -543,31 +610,128 @@
         </header>
 
         <!-- Body -->
-        <div class="content-body">
-            <div class="module-header">
-                <h2 class="module-title">Color Library</h2>
-                <button class="btn btn-primary" id="add-btn" onclick="startAddNew()">
-                    <i class="fas fa-plus"></i> Add New Color
-                </button>
+        <div class="content-body" id="main-scroll-area">
+            
+            <!-- VIEW: DASHBOARD (Default) -->
+            <div id="view-dashboard" class="view-section active-view">
+                <div class="dashboard-container">
+                    <div class="plant-tile" onclick="switchView('view-color-library', null, null)">
+                        <div class="tile-name">FERNLEY</div>
+                        <i class="fas fa-cog tile-icon"></i>
+                    </div>
+                    <div class="plant-tile">
+                        <div class="tile-name">WINCHESTER</div>
+                        <i class="fas fa-cog tile-icon"></i>
+                    </div>
+                </div>
             </div>
 
-            <!-- Data Table -->
-            <div class="data-card">
-                <table>
-                    <thead>
-                        <tr>
-                            <th width="10%">SL. No.</th>
-                            <th width="40%">Color Name</th>
-                            <th width="10%" style="text-align: center;">History</th>
-                            <th width="20%">Status</th>
-                            <th width="20%">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="color-table-body">
-                        <!-- Rows generated by JS -->
-                    </tbody>
-                </table>
+            <!-- VIEW: COLOR LIBRARY -->
+            <div id="view-color-library" class="view-section">
+                <div class="module-header">
+                    <h2 class="module-title">Color Library</h2>
+                    <button class="btn btn-primary" id="add-btn" onclick="startAddNew()">
+                        <i class="fas fa-plus"></i> Add New Color
+                    </button>
+                </div>
+
+                <div class="data-card">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th width="10%">SL. No.</th>
+                                <th width="40%">Color Name</th>
+                                <th width="10%" style="text-align: center;">History</th>
+                                <th width="20%">Status</th>
+                                <th width="20%">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="color-table-body">
+                            <!-- Rows generated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Space to scroll -->
+                <div style="height: 50px;"></div>
             </div>
+
+            <!-- VIEW: APPLICATION SETTINGS -->
+            <div id="view-app-settings" class="view-section">
+                <div class="module-header">
+                    <h2 class="module-title">Application Settings</h2>
+                </div>
+                <div class="settings-card">
+                    <div class="form-group">
+                        <label class="form-label">Software Logo Update</label>
+                        <p style="font-size: 13px; color: #666; margin-bottom: 10px;">Upload an image to replace the top-left logo.</p>
+                        <input type="file" id="logo-upload" accept="image/*" class="form-input" onchange="handleLogoUpload(event)">
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-primary" onclick="showToast('Settings Saved', 'success')">Save Settings</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VIEW: ROLES -->
+            <div id="view-roles" class="view-section">
+                <div class="module-header">
+                    <h2 class="module-title">User Roles</h2>
+                </div>
+                <div class="settings-card">
+                    <div style="margin-bottom: 20px;">
+                        <h3 style="margin-bottom: 10px; font-size: 16px;">Color Library Permissions</h3>
+                        <p style="color: #666; font-size: 13px;">
+                            Configure access rights for the Color Library module. 
+                            <br><strong>Note:</strong> Toggling these switches simulates the active user's permissions in this prototype.
+                        </p>
+                    </div>
+
+                    <div class="permission-item">
+                        <div class="perm-info">
+                            <div>Create Permission (New)</div>
+                            <div class="perm-desc">Allows user to add new colors to the library.</div>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="perm-new" checked onchange="updatePermissions()">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="permission-item">
+                        <div class="perm-info">
+                            <div>Edit Permission</div>
+                            <div class="perm-desc">Allows user to modify existing color names.</div>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="perm-edit" checked onchange="updatePermissions()">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="permission-item">
+                        <div class="perm-info">
+                            <div>Deactivate Permission (Delete)</div>
+                            <div class="perm-desc">Allows user to toggle status (Active/Inactive) of a color.</div>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="perm-delete" checked onchange="updatePermissions()">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VIEW: GENERIC PLACEHOLDER -->
+            <div id="view-placeholder" class="view-section">
+                <div class="module-header">
+                    <h2 class="module-title" id="placeholder-title">Library</h2>
+                </div>
+                <div class="data-card" style="padding: 40px; text-align: center; color: #999;">
+                    <i class="fas fa-tools" style="font-size: 40px; margin-bottom: 15px;"></i>
+                    <p>This module is currently under development.</p>
+                </div>
+            </div>
+
         </div>
     </div>
 
@@ -602,32 +766,6 @@
     <!-- Toast Notification -->
     <div class="toast" id="toast">Message here</div>
 
-    <!-- DEMO CONTROLS for Prototype Reviewer -->
-    <div class="demo-controls">
-        <div class="demo-title">Simulate Role Permissions</div>
-        <div class="demo-option">
-            <span>Can Create (New)</span>
-            <label class="switch" style="width: 30px; height: 16px;">
-                <input type="checkbox" id="perm-new" checked onchange="updatePermissions()">
-                <span class="slider" style="border-radius: 16px;"></span>
-            </label>
-        </div>
-        <div class="demo-option">
-            <span>Can Edit</span>
-            <label class="switch" style="width: 30px; height: 16px;">
-                <input type="checkbox" id="perm-edit" checked onchange="updatePermissions()">
-                <span class="slider" style="border-radius: 16px;"></span>
-            </label>
-        </div>
-        <div class="demo-option">
-            <span>Can Deactivate (Delete)</span>
-            <label class="switch" style="width: 30px; height: 16px;">
-                <input type="checkbox" id="perm-delete" checked onchange="updatePermissions()">
-                <span class="slider" style="border-radius: 16px;"></span>
-            </label>
-        </div>
-    </div>
-
     <script>
         // --- State Management ---
         const state = {
@@ -637,16 +775,17 @@
                 delete: true
             },
             colors: [
-                { id: 1, name: 'Red', status: true, history: [] },
-                { id: 2, name: 'Green', status: true, history: [] },
-                { id: 3, name: 'Blue', status: true, history: [] },
-                { id: 4, name: 'Yellow', status: false, history: [] }
+                { id: 1, slNo: 1, name: 'Red', status: true, history: [] },
+                { id: 2, slNo: 2, name: 'Green', status: true, history: [] },
+                { id: 3, slNo: 3, name: 'Blue', status: true, history: [] },
+                { id: 4, slNo: 4, name: 'Yellow', status: false, history: [] }
             ],
-            editingId: null, // ID of row currently being edited
-            isCreating: false // True if adding a new row
+            editingId: null,
+            isCreating: false,
+            nextSlNo: 5
         };
 
-        // Initialize history for demo data
+        // Initialize history
         state.colors.forEach(c => {
             c.history.push({
                 date: '10-Dec-2025 10:00:00',
@@ -660,32 +799,71 @@
         const tableBody = document.getElementById('color-table-body');
         const addBtn = document.getElementById('add-btn');
         const toast = document.getElementById('toast');
+        const mainScrollArea = document.getElementById('main-scroll-area');
 
-        // --- Render Functions ---
-        function renderTable() {
-            tableBody.innerHTML = '';
-
-            // Handle "Add New" Row
-            if (state.isCreating) {
-                const newRow = document.createElement('tr');
-                newRow.className = 'edit-mode';
-                newRow.innerHTML = `
-                    <td>Auto</td>
-                    <td>
-                        <input type="text" class="form-input" id="new-color-name" placeholder="Enter Color Name" autofocus>
-                        <div class="error-msg" id="new-error"></div>
-                    </td>
-                    <td style="text-align: center;"><i class="fas fa-history" style="color: #ccc;"></i></td>
-                    <td><span class="status-badge status-active">Active</span></td>
-                    <td class="actions-cell">
-                        <button class="btn btn-success btn-sm" onclick="saveNewColor()"><i class="fas fa-check"></i> Save</button>
-                        <button class="btn btn-secondary btn-sm" onclick="cancelNew()"><i class="fas fa-times"></i></button>
-                    </td>
-                `;
-                tableBody.appendChild(newRow);
+        // --- Navigation Logic ---
+        function switchView(viewId, navElement, subNavElement, titleOverride) {
+            // Hide all views
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active-view'));
+            // Show target view
+            document.getElementById(viewId).classList.add('active-view');
+            
+            // Update Headers
+            const titleMap = {
+                'view-dashboard': 'Plant Dashboard',
+                'view-color-library': 'Color Library',
+                'view-app-settings': 'Configuration Dashboard',
+                'view-roles': 'User Management',
+                'view-placeholder': titleOverride || 'Library'
+            };
+            document.getElementById('page-title-display').innerText = titleMap[viewId];
+            if(viewId === 'view-placeholder' && titleOverride) {
+                document.getElementById('placeholder-title').innerText = titleOverride;
             }
 
-            // Handle Existing Data
+            // Update Nav Active State
+            if (navElement || subNavElement) {
+                document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
+                document.querySelectorAll('.submenu-item').forEach(el => el.classList.remove('active-sub'));
+                
+                if (navElement) navElement.classList.add('active');
+                if (subNavElement) {
+                    subNavElement.classList.add('active-sub');
+                }
+            }
+        }
+
+        function toggleSubmenu(id) {
+            const el = document.getElementById(id);
+            if (el.style.display === 'block' || el.classList.contains('open')) {
+                el.style.display = 'none';
+                el.classList.remove('open');
+            } else {
+                el.style.display = 'block';
+                el.classList.add('open');
+            }
+        }
+
+        // --- Logo Upload Logic ---
+        function handleLogoUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const logoArea = document.getElementById('logo-area');
+                    logoArea.innerHTML = `<img src="${e.target.result}" class="logo-img" alt="Logo">`;
+                    showToast('Logo updated successfully', 'success');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // --- Color Library Logic ---
+
+        function renderTable(scrollToBottom = false) {
+            tableBody.innerHTML = '';
+
+            // 1. Render Existing Data
             state.colors.forEach((color, index) => {
                 const isEditing = state.editingId === color.id;
                 const tr = document.createElement('tr');
@@ -695,7 +873,7 @@
                     // EDIT MODE
                     const canDelete = state.permissions.delete;
                     tr.innerHTML = `
-                        <td>${index + 1}</td>
+                        <td>${color.slNo}</td>
                         <td>
                             <input type="text" class="form-input" id="edit-name-${color.id}" value="${color.name}">
                             <div class="error-msg" id="edit-error-${color.id}"></div>
@@ -724,7 +902,7 @@
                 } else {
                     // VIEW MODE
                     tr.innerHTML = `
-                        <td>${index + 1}</td>
+                        <td>${color.slNo}</td>
                         <td>${color.name}</td>
                         <td style="text-align: center;">
                             <i class="fas fa-history" style="cursor: pointer; color: var(--primary-color);" onclick="showHistory(${color.id})"></i>
@@ -744,21 +922,49 @@
                 }
                 tableBody.appendChild(tr);
             });
+
+            // 2. Render "Add New" Row at the BOTTOM
+            if (state.isCreating) {
+                const newRow = document.createElement('tr');
+                newRow.className = 'edit-mode';
+                newRow.id = 'new-row-element'; 
+                newRow.innerHTML = `
+                    <td>${state.nextSlNo}</td>
+                    <td>
+                        <input type="text" class="form-input" id="new-color-name" placeholder="Enter Color Name" autofocus>
+                        <div class="error-msg" id="new-error"></div>
+                    </td>
+                    <td style="text-align: center;"><i class="fas fa-history" style="color: #ccc;"></i></td>
+                    <td><span class="status-badge status-active">Active</span></td>
+                    <td class="actions-cell">
+                        <button class="btn btn-success btn-sm" onclick="saveNewColor()"><i class="fas fa-check"></i> Save</button>
+                        <button class="btn btn-secondary btn-sm" onclick="cancelNew()"><i class="fas fa-times"></i></button>
+                    </td>
+                `;
+                tableBody.appendChild(newRow);
+            }
+            
+            if (scrollToBottom) {
+                setTimeout(() => {
+                    mainScrollArea.scrollTop = mainScrollArea.scrollHeight;
+                }, 100);
+            }
         }
 
         function updateUIControls() {
-            // Show/Hide Add Button based on permission
             addBtn.style.display = state.permissions.new ? 'inline-flex' : 'none';
         }
 
-        // --- Actions ---
+        // --- CRUD Actions ---
 
         function startAddNew() {
-            if (state.editingId) cancelEdit(); // Close other edits
+            if (state.editingId) cancelEdit(); 
             state.isCreating = true;
-            renderTable();
-            // Focus new input
-            setTimeout(() => document.getElementById('new-color-name').focus(), 50);
+            renderTable(true); // Render and scroll to bottom
+            setTimeout(() => {
+                const el = document.getElementById('new-color-name');
+                if(el) el.focus();
+            }, 150);
         }
 
         function cancelNew() {
@@ -773,7 +979,6 @@
             const errorDiv = document.getElementById('new-error');
             const name = input.value.trim();
 
-            // Validation
             if (!name) {
                 showInlineError(errorDiv, "Color Name is required");
                 return;
@@ -783,9 +988,9 @@
                 return;
             }
 
-            // Save
             const newColor = {
                 id: Date.now(),
+                slNo: state.nextSlNo,
                 name: name,
                 status: true,
                 history: [{
@@ -796,9 +1001,11 @@
                 }]
             };
             
-            state.colors.unshift(newColor); // Add to top
+            state.colors.push(newColor); // Add to END
+            state.nextSlNo++; // Increment Serial
             state.isCreating = false;
-            renderTable();
+            
+            renderTable(true); // Keep scrolled to bottom to show new record
             showToast("Color '" + name + "' created successfully", 'success');
         }
 
@@ -806,8 +1013,10 @@
             if (state.isCreating) state.isCreating = false;
             state.editingId = id;
             renderTable();
-            // Focus
-            setTimeout(() => document.getElementById(`edit-name-${id}`).focus(), 50);
+            setTimeout(() => {
+                const el = document.getElementById(`edit-name-${id}`);
+                if(el) el.focus();
+            }, 50);
         }
 
         function cancelEdit() {
@@ -820,34 +1029,27 @@
             const statusInput = document.getElementById(`edit-status-${id}`);
             const errorDiv = document.getElementById(`edit-error-${id}`);
             const newName = input.value.trim();
-            
-            // Get original color
             const color = state.colors.find(c => c.id === id);
             
-            // Determine Status (if permission denied, keep original)
             let newStatus = color.status;
             if (state.permissions.delete && statusInput) {
                 newStatus = statusInput.checked;
             }
 
-            // Validation
             if (!newName) {
                 showInlineError(errorDiv, "Color Name is required");
                 return;
             }
-            // Check uniqueness excluding self
             if (state.colors.some(c => c.id !== id && c.name.toLowerCase() === newName.toLowerCase())) {
                 showInlineError(errorDiv, "Color Name must be unique");
                 return;
             }
 
-            // Detect Changes
             const changes = [];
             if (color.name !== newName) changes.push(`Name: ${color.name} -> ${newName}`);
             if (color.status !== newStatus) changes.push(`Status: ${color.status?'Active':'Inactive'} -> ${newStatus?'Active':'Inactive'}`);
 
             if (changes.length > 0) {
-                // Update Data
                 color.name = newName;
                 color.status = newStatus;
                 color.history.unshift({
@@ -856,7 +1058,6 @@
                     user: 'Demo User',
                     details: changes.join(', ')
                 });
-
                 showToast("Color updated successfully", 'success');
             }
 
@@ -864,33 +1065,21 @@
             renderTable();
         }
 
-        // --- History Modal ---
+        // --- History & Utils ---
         function showHistory(id) {
             const color = state.colors.find(c => c.id === id);
             document.getElementById('history-title').innerText = `Color History - ${color.name}`;
             const historyBody = document.getElementById('history-content');
             historyBody.innerHTML = '';
-
             color.history.forEach(h => {
-                const row = `
-                    <tr>
-                        <td>${h.date}</td>
-                        <td>${h.action}</td>
-                        <td>${h.user}</td>
-                        <td>${h.details}</td>
-                    </tr>
-                `;
-                historyBody.innerHTML += row;
+                historyBody.innerHTML += `<tr><td>${h.date}</td><td>${h.action}</td><td>${h.user}</td><td>${h.details}</td></tr>`;
             });
-
             document.getElementById('history-modal').style.display = 'flex';
         }
 
         function closeHistory() {
             document.getElementById('history-modal').style.display = 'none';
         }
-
-        // --- Utilities ---
 
         function showInlineError(element, msg) {
             element.innerText = msg;
@@ -900,9 +1089,7 @@
         function showToast(msg, type) {
             toast.innerText = msg;
             toast.className = `toast ${type} show`;
-            setTimeout(() => {
-                toast.className = 'toast';
-            }, 3000);
+            setTimeout(() => { toast.className = 'toast'; }, 3000);
         }
 
         function getFormattedDate() {
@@ -912,27 +1099,12 @@
             return `${pad(now.getDate())}-${months[now.getMonth()]}-${now.getFullYear()} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
         }
 
-        function toggleSubmenu(id) {
-            const el = document.getElementById(id);
-            if (el.style.display === 'block' || el.classList.contains('open')) {
-                el.style.display = 'none';
-                el.classList.remove('open');
-            } else {
-                el.style.display = 'block';
-                el.classList.add('open');
-            }
-        }
-
-        // --- Demo Permission Control ---
         function updatePermissions() {
             state.permissions.new = document.getElementById('perm-new').checked;
             state.permissions.edit = document.getElementById('perm-edit').checked;
             state.permissions.delete = document.getElementById('perm-delete').checked;
-            
-            // Reset edit state to avoid UI glitches when permissions change mid-edit
             state.editingId = null;
             state.isCreating = false;
-            
             updateUIControls();
             renderTable();
         }
