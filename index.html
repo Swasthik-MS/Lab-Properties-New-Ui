@@ -362,6 +362,12 @@
             border-radius: 4px;
             font-size: 14px;
         }
+
+        .form-input:disabled {
+            background-color: #f0f0f0;
+            color: #666;
+            cursor: not-allowed;
+        }
         
         .error-msg {
             color: var(--danger-color);
@@ -640,9 +646,9 @@
                         <thead>
                             <tr>
                                 <th width="10%">SL. No.</th>
-                                <th width="40%">Color Name</th>
-                                <th width="10%" style="text-align: center;">History</th>
+                                <th width="35%">Color Name</th>
                                 <th width="20%">Status</th>
+                                <th width="15%" style="text-align: center;">History</th>
                                 <th width="20%">Action</th>
                             </tr>
                         </thead>
@@ -875,13 +881,11 @@
                     tr.innerHTML = `
                         <td>${color.slNo}</td>
                         <td>
-                            <input type="text" class="form-input" id="edit-name-${color.id}" value="${color.name}">
+                            <!-- COLOR NAME is READ-ONLY in Edit Mode -->
+                            <input type="text" class="form-input" id="edit-name-${color.id}" value="${color.name}" disabled>
                             <div class="error-msg" id="edit-error-${color.id}"></div>
                         </td>
-                        <td style="text-align: center;">
-                             <i class="fas fa-history" style="cursor: pointer; color: var(--primary-color);" onclick="showHistory(${color.id})"></i>
-                        </td>
-                        <td>
+                         <td>
                             ${canDelete ? `
                             <label class="switch">
                                 <input type="checkbox" id="edit-status-${color.id}" ${color.status ? 'checked' : ''}>
@@ -894,6 +898,9 @@
                             </span>
                             `}
                         </td>
+                        <td style="text-align: center;">
+                             <i class="fas fa-history" style="cursor: pointer; color: var(--primary-color);" onclick="showHistory(${color.id})"></i>
+                        </td>
                         <td class="actions-cell">
                             <button class="btn btn-primary btn-sm" onclick="updateColor(${color.id})">Update</button>
                             <button class="btn btn-secondary btn-sm" onclick="cancelEdit()"><i class="fas fa-times"></i></button>
@@ -904,13 +911,13 @@
                     tr.innerHTML = `
                         <td>${color.slNo}</td>
                         <td>${color.name}</td>
-                        <td style="text-align: center;">
-                            <i class="fas fa-history" style="cursor: pointer; color: var(--primary-color);" onclick="showHistory(${color.id})"></i>
-                        </td>
                         <td>
                             <span class="status-badge ${color.status ? 'status-active' : 'status-inactive'}">
                                 ${color.status ? 'Active' : 'Inactive'}
                             </span>
+                        </td>
+                        <td style="text-align: center;">
+                            <i class="fas fa-history" style="cursor: pointer; color: var(--primary-color);" onclick="showHistory(${color.id})"></i>
                         </td>
                         <td class="actions-cell">
                             ${state.permissions.edit ? 
@@ -934,8 +941,8 @@
                         <input type="text" class="form-input" id="new-color-name" placeholder="Enter Color Name" autofocus>
                         <div class="error-msg" id="new-error"></div>
                     </td>
-                    <td style="text-align: center;"><i class="fas fa-history" style="color: #ccc;"></i></td>
                     <td><span class="status-badge status-active">Active</span></td>
+                     <td style="text-align: center;"><i class="fas fa-history" style="color: #ccc;"></i></td>
                     <td class="actions-cell">
                         <button class="btn btn-success btn-sm" onclick="saveNewColor()"><i class="fas fa-check"></i> Save</button>
                         <button class="btn btn-secondary btn-sm" onclick="cancelNew()"><i class="fas fa-times"></i></button>
@@ -1013,10 +1020,7 @@
             if (state.isCreating) state.isCreating = false;
             state.editingId = id;
             renderTable();
-            setTimeout(() => {
-                const el = document.getElementById(`edit-name-${id}`);
-                if(el) el.focus();
-            }, 50);
+            // Note: We don't focus name anymore since it is disabled
         }
 
         function cancelEdit() {
@@ -1025,10 +1029,7 @@
         }
 
         function updateColor(id) {
-            const input = document.getElementById(`edit-name-${id}`);
             const statusInput = document.getElementById(`edit-status-${id}`);
-            const errorDiv = document.getElementById(`edit-error-${id}`);
-            const newName = input.value.trim();
             const color = state.colors.find(c => c.id === id);
             
             let newStatus = color.status;
@@ -1036,21 +1037,11 @@
                 newStatus = statusInput.checked;
             }
 
-            if (!newName) {
-                showInlineError(errorDiv, "Color Name is required");
-                return;
-            }
-            if (state.colors.some(c => c.id !== id && c.name.toLowerCase() === newName.toLowerCase())) {
-                showInlineError(errorDiv, "Color Name must be unique");
-                return;
-            }
-
             const changes = [];
-            if (color.name !== newName) changes.push(`Name: ${color.name} -> ${newName}`);
+            // Name check removed as it is read-only
             if (color.status !== newStatus) changes.push(`Status: ${color.status?'Active':'Inactive'} -> ${newStatus?'Active':'Inactive'}`);
 
             if (changes.length > 0) {
-                color.name = newName;
                 color.status = newStatus;
                 color.history.unshift({
                     date: getFormattedDate(),
@@ -1059,6 +1050,8 @@
                     details: changes.join(', ')
                 });
                 showToast("Color updated successfully", 'success');
+            } else {
+                 showToast("No changes made", 'success'); // Or just close
             }
 
             state.editingId = null;
